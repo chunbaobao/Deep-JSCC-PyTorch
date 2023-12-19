@@ -8,6 +8,7 @@ Created on Tue Dec  11:00:00 2023
 import torch
 import torch.nn as nn
 import numpy as np
+import channel
 
 
 class _ConvWithPReLU(nn.Module):
@@ -50,11 +51,12 @@ def _NormlizationLayer(norm_type='nomalization'):
 def ratio2filter_size(x, ratio):
     before_size = np.prod(x.size())
     after_size = before_size*ratio
-    encoder_temp = Encoder(c=after_size)
+    encoder_temp = Encoder(is_temp=True)
+    x_temp = encoder_temp(x)
 
 
 class Encoder(nn.Module):
-    def __init__(self, c, is_temp=False):
+    def __init__(self, c=1, is_temp=False):
         super(Encoder, self).__init__()
         self.is_temp = is_temp
         self.imgae_normalization = _image_normalization(norm_type='nomalization')
@@ -81,3 +83,18 @@ class Encoder(nn.Module):
 class Decoder(nn.Module):
     def __init__(self):
         super(Decoder, self).__init__()
+
+    def forward(self, x):
+        pass
+
+
+class DeepJSCC(nn.Module):
+    def __init__(self):
+        super(DeepJSCC, self).__init__()
+        self.encoder = Encoder()
+        self.decoder = Decoder()
+
+    def forward(self, x):
+        z = self.encoder(x)
+        x_hat = self.decoder(z)
+        return x_hat
