@@ -23,12 +23,12 @@ def config_parser():
     parser.add_argument('--lr', default=1e-3, type=float, help='learning rate')
     parser.add_argument('--epochs', default=100, type=int, help='number of epochs')
     parser.add_argument('--batch_size', default=64, type=int, help='batch size')
-    parser.add_argument('--momentum', default=0.9, type=float, help='momentum')
     parser.add_argument('--weight_decay', default=5e-4, type=float, help='weight decay')
     parser.add_argument('--channel', default='AWGN', type=str, help='channel type')
     parser.add_argument('--saved', default='./saved', type=str, help='saved_path')
     parser.add_argument('--snr_list', default=range(1, 19, 3), type=list, help='snr_list')
     parser.add_argument('--ratio_list', default=[1/6, 1/12], type=list, help='ratio_list')
+    parser.add_argument('--num_workers', default=0, type=int, help='num_workers')
     return parser.parse_args()
 
 
@@ -44,20 +44,20 @@ def main():
 
 def train(args: config_parser(), ratio: float, snr: float):
 
-
     device = torch.device('cuda:1')
     # load data
     transform = transforms.Compose([transforms.ToTensor(), ])
     train_dataset = datasets.CIFAR10(root='./Dataset/', train=True,
                                      download=True, transform=transform)
 
-    train_loader = DataLoader(train_dataset, shuffle=True, batch_size=args.batch_size)
+    train_loader = DataLoader(train_dataset, shuffle=True,
+                              batch_size=args.batch_size, num_workers=args.num_workers)
     test_dataset = datasets.CIFAR10(root='./Dataset/', train=False,
                                     download=True, transform=transform)
     test_loader = RandomSampler(test_dataset, replacement=True, num_samples=args.batch_size)
-    
+
     print("training with ratio: {}, snr_db: {}, channel: {}".format(ratio, snr, args.channel))
-    
+
     image_fisrt = train_dataset.__getitem__(0)[0]
     c = ratio2filtersize(image_fisrt, ratio)
     model = DeepJSCC(c=c, channel_type=args.channel, snr=snr).cuda(device=device)
