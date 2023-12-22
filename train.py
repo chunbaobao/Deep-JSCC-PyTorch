@@ -44,7 +44,7 @@ def main():
 
 def train(args: config_parser(), ratio: float, snr: float):
 
-    device = torch.device('cuda:1')
+    device = torch.device('cuda')
     # load data
     transform = transforms.Compose([transforms.ToTensor(), ])
     train_dataset = datasets.CIFAR10(root='./Dataset/', train=True,
@@ -56,13 +56,13 @@ def train(args: config_parser(), ratio: float, snr: float):
                                     download=True, transform=transform)
     test_loader = RandomSampler(test_dataset, replacement=True, num_samples=args.batch_size)
 
-    print("training with ratio: {}, snr_db: {}, channel: {}".format(ratio, snr, args.channel))
+    print("training with ratio: {:2f}, snr_db: {}, channel: {}".format(ratio, snr, args.channel))
 
     image_fisrt = train_dataset.__getitem__(0)[0]
     c = ratio2filtersize(image_fisrt, ratio)
     model = DeepJSCC(c=c, channel_type=args.channel, snr=snr).cuda(device=device)
 
-    criterion = nn.MSELoss().cuda(device=device)
+    criterion = nn.MSELoss(reduction='sum').cuda(device=device)
     optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     epoch_loop = tqdm(range(args.epochs), total=args.epochs, leave=False)
 
@@ -72,7 +72,7 @@ def train(args: config_parser(), ratio: float, snr: float):
             optimizer.zero_grad()
             images = images.cuda(device=device)
             outputs = model(images)
-            loss = criterion(outputs, images)
+            loss = criterion(outputs, images) / args.batch_size
             loss.backward()
             optimizer.step()
             run_loss += loss.item()

@@ -87,8 +87,6 @@ class _Encoder(nn.Module):
             k = torch.tensor(k)
             z_temp = z_hat.reshape(batch_size, 1, 1, -1)
             z_trans = z_hat.reshape(batch_size, 1, -1, 1)
-            temp = z_temp@z_trans
-            temp = torch.sqrt((z_temp @ z_trans))
             tensor = torch.sqrt(P * k) * z_hat / torch.sqrt((z_temp @ z_trans))
             return tensor
         return _inner
