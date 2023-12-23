@@ -29,7 +29,8 @@ def config_parser():
     parser.add_argument('--channel', default='AWGN', type=str,
                         choices=['AWGN', 'Rayleigh'], help='channel type')
     parser.add_argument('--saved', default='./saved', type=str, help='saved_path')
-    parser.add_argument('--snr_list', default=list(range(1, 19, 3)), nargs='+', help='snr_list')
+    parser.add_argument('--snr_list', default=['19', '13',
+                        '7', '4', '1'], nargs='+', help='snr_list')
     parser.add_argument('--ratio_list', default=['1/3',
                         '1/6', '1/12'], nargs='+', help='ratio_list')
     parser.add_argument('--num_workers', default=0, type=int, help='num_workers')
