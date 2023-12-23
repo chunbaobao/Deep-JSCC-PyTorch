@@ -4,6 +4,8 @@ import torch.nn as nn
 from PIL import Image
 from torchvision import transforms
 from utils import get_psnr, image_normalization
+import os
+from model import DeepJSCC
 
 
 def config_parser():
@@ -14,6 +16,7 @@ def config_parser():
     parser.add_argument('--snr', default=20, type=int, help='snr')
     parser.add_argument('--test_image', default='./demo/kodim08.png', type=str, help='demo_image')
     parser.add_argument('--times', default=100, type=int, help='num_workers')
+    parser.add_argument('--filters', default=40, type=int, help='channel type')
     return parser.parse_args()
 
 
@@ -24,8 +27,14 @@ def main():
     test_image = Image.open(args.test_image)
     test_image.load()
     test_image = transform(test_image)
-    model = torch.load(args.saved)
+
+    file_name = os.path.basename(args.saved)
+    c = file_name.split('_')[-1].split('.')[0]
+    c = int(c)
+    model = DeepJSCC(c=c, channel_type=args.channel, snr=args.snr)
+    model.load_state_dict(torch.load(args.saved))
     model.change_channel(args.channel, args.snr)
+
     psnr_all = 0.0
     for i in range(args.times):
         demo_image = model(test_image)
