@@ -15,8 +15,7 @@ def image_normalization(norm_type):
 
 
 def get_psnr(image, gt, max=255):
-    image = image_normalization('denormalization')(image)
-    gt = image_normalization('denormalization')(gt)
+
     mse = F.mse_loss(image, gt)
 
     psnr = 10 * torch.log10(max**2 / mse)

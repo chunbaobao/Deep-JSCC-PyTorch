@@ -140,3 +140,6 @@ class DeepJSCC(nn.Module):
         z = self.channel(z)
         x_hat = self.decoder(z)
         return x_hat
+
+    def change_channel(self, channel_type, snr):
+        self.channel = channel.channel(channel_type, snr)
