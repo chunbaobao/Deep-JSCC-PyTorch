@@ -61,7 +61,7 @@ class _TransConvWithPReLU(nn.Module):
 
 
 class _Encoder(nn.Module):
-    def __init__(self, c=1, is_temp=False):
+    def __init__(self, c=1, is_temp=False,P=1):
         super(_Encoder, self).__init__()
         self.is_temp = is_temp
         # self.imgae_normalization = _image_normalization(norm_type='nomalization')
@@ -71,7 +71,7 @@ class _Encoder(nn.Module):
                                     kernel_size=5, padding=2)  # padding size could be changed here
         self.conv4 = _ConvWithPReLU(in_channels=32, out_channels=32, kernel_size=5, padding=2)
         self.conv5 = _ConvWithPReLU(in_channels=32, out_channels=c, kernel_size=5, padding=2)
-        self.norm = self._normlizationLayer()
+        self.norm = self._normlizationLayer(P=P)
 
     @staticmethod
     def _normlizationLayer(P=1):
@@ -88,6 +88,8 @@ class _Encoder(nn.Module):
             z_temp = z_hat.reshape(batch_size, 1, 1, -1)
             z_trans = z_hat.reshape(batch_size, 1, -1, 1)
             tensor = torch.sqrt(P * k) * z_hat / torch.sqrt((z_temp @ z_trans))
+            if batch_size == 1:
+                return tensor.squeeze(0)
             return tensor
         return _inner
 
