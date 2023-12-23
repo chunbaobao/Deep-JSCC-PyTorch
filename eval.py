@@ -37,9 +37,9 @@ def main():
     psnr_all = 0.0
     for i in range(args.times):
         demo_image = model(test_image)
-        demo_image = image_normalization('denormalization')(image)
-        gt = image_normalization('denormalization')(gt)
-        psnr_all += get_psnr(demo_image, test_image)
+        demo_image = image_normalization('denormalization')(demo_image)
+        gt = image_normalization('denormalization')(test_image)
+        psnr_all += get_psnr(demo_image, gt)
     demo_image = torch.cat([test_image, demo_image], dim=1)
     demo_image = transforms.ToPILImage()(demo_image)
     demo_image.save('./demo/demo.png')
