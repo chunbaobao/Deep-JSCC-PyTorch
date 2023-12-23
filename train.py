@@ -93,8 +93,9 @@ def train(args: config_parser(), ratio: float, snr: float):
             optimizer.zero_grad()
             images = images.cuda()
             outputs = model(images)
-            loss = criterion(image_normalization('denormalization')(outputs),
-                             image_normalization('denormalization')(images))
+            outputs = image_normalization('denormalization')(outputs)
+            images = image_normalization('denormalization')(images)
+            loss = criterion(outputs, images)
             loss.backward()
             optimizer.step()
             run_loss += loss.item()
