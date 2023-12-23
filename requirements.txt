@@ -3,4 +3,4 @@ torchvison
 matplotlib
 tqdm
 numpy
-fraction
+pillow

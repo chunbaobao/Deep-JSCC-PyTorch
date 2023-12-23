@@ -11,3 +11,8 @@ def image_normalization(norm_type):
         else:
             raise Exception('Unknown type of normalization')
     return _inner
+
+def get_psnr(image,gt,max=255):
+    psnr = 10 * torch.log10(max**2 / torch.mean((image - gt)**2))
+    return psnr
+    

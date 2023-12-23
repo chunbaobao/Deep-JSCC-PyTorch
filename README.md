@@ -16,7 +16,7 @@ pip install requirements.txt
 Run(example)
 ```
 cd ./Deep-JSCC-PyTorch
-python train.py --seed 2048 --epochs 200 --batch_size 256 --channel 'AWGN' --saved ./saved --snr_list [1,4,7,13,19] --ratio_list [1/6,1/12]
+python train.py --seed 2048 --epochs 200 --batch_size 256 --channel 'AWGN' --saved ./saved --snr_list [1,4,7,13,19] --ratio_list [1/6,1/12] --dataset imagenet
 ```
 
 ### Evaluation
