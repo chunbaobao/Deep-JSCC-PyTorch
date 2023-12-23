@@ -20,7 +20,3 @@ def get_psnr(image, gt, max=255):
 
     psnr = 10 * torch.log10(max**2 / mse)
     return psnr
-
-
-a = torch.randn(2, 3, 32, 32)
-b = image_normalization('nomalization')(a)
