@@ -33,7 +33,7 @@ def config_parser():
     parser.add_argument('--num_workers', default=0, type=int, help='num_workers')
     parser.add_argument('--dataset', default='cifar10', type=str,
                         choices=['cifar10', 'imagenet'], help='dataset')
-    parser.add_argument('--parallel', default=True, type=bool, help='parallel')
+    parser.add_argument('--parallel', default=False, type=bool, help='parallel')
     return parser.parse_args()
 
 
