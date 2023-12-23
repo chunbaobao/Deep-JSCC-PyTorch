@@ -2,13 +2,36 @@
 import torch
 import torch.nn as nn
 from PIL import Image
-
+from torchvision import transforms
+from utils import get_psnr
 
 def config_parser():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--channel', default='AWGN', type=str, help='channel type')
-    parser.add_argument('--saved', default='./saved', type=str, help='saved_path')
+    parser.add_argument('--saved', type=str, help='saved_path')
     parser.add_argument('--snr_list', default=range(1, 19, 3), type=list, help='snr_list')
-    parser.add_argument('--demo_image', default='./demo/kodim08.png', type=str, help='demo_image')
+    parser.add_argument('--test_image', default='./demo/kodim08.png', type=str, help='demo_image')
+    parser.add_argument('--times', default=100, type=int, help='num_workers')
     return parser.parse_args()
+
+
+def main():
+    args = config_parser()
+    transform = transforms.Compose([transforms.ToTensor(), ])
+
+    test_image = Image.open(args.test_image)
+    test_image.load()
+    test_image = transform(test_image)
+    model = torch.load(args.saved)
+    psnr_all = 0.0
+    for i in range(args.times):
+        demo_image = model(test_image)
+        psnr_all += get_psnr(demo_image, test_image)
+    demo_image = torch.cat([test_image, demo_image], dim=1)
+    demo_image = transforms.ToPILImage()(demo_image)
+    demo_image.save('./demo/demo.png')
+    print("psnr on {} is {}".format(args.test_image, psnr_all / args.times))
+
+if __name__ == '__main__':
+    main()

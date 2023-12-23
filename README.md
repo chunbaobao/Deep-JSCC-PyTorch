@@ -13,12 +13,18 @@ pip install requirements.txt
 
 ## Usage
 ### Training Model
-Run(example)
+Run(example presented in paper)
 ```
 cd ./Deep-JSCC-PyTorch
-python train.py --seed 2048 --epochs 200 --batch_size 256 --channel 'AWGN' --saved ./saved --snr_list [1,4,7,13,19] --ratio_list [1/6,1/12] --dataset imagenet
 ```
 
+```
+python train.py --lr 10e-4 --epochs 100 --batch_size 32 --channel 'AWGN' --saved ./saved --snr_list [1,4,7,13,19] --ratio_list [1/6,1/12] --dataset imagenet
+```
+or
+```
+python train.py --lr 10e-3 --epochs 100 --batch_size 64 --channel 'AWGN' --saved ./saved --snr_list [1,4,7,13,19] --ratio_list [1/6,1/12] --dataset cifar10
+```
 ### Evaluation
 
 
