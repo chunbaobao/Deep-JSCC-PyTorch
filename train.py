@@ -75,7 +75,7 @@ def train(args: config_parser(), ratio: float, snr: float):
 
         train_loader = DataLoader(train_dataset, shuffle=True,
                                   batch_size=args.batch_size, num_workers=args.num_workers)
-        test_dataset = datasets.ImageNet(root='./Dataset/ImageNet/val', transform=transform)
+        test_dataset = datasets.ImageFolder(root='./Dataset/ImageNet/val', transform=transform)
         test_loader = DataLoader(test_dataset, shuffle=True,
                                  batch_size=args.batch_size, num_workers=args.num_workers)
     else:

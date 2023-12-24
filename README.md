@@ -19,21 +19,20 @@ conda or other virtual environment is recommended.
 ```
 git clone https://github.com/chunbaobao/Deep-JSCC-PyTorch.git
 cd ./Deep-JSCC-PyTorch
+pip install requirements.txt
 ```
 
 ## Usage
 ### Training Model
-Run(example presented in paper)
-```
-pip install requirements.txt
-```
+Run(example presented in paper) on cifar10
 
 ```
-python train.py --lr 10e-4 --epochs 100 --batch_size 32 --channel 'AWGN' --saved ./saved --snr_list 1 4 7 13 19 --ratio_list 1/6 1/12 --dataset imagenet
+python train.py --lr 10e-3 --epochs 100 --batch_size 64 --channel 'AWGN' --saved ./saved --snr_list 1 4 7 13 19 --ratio_list 1/6 1/12 --dataset cifar10 --num_workers 4 --parallel True --if_scheduler True --scheduler_step_size 50
 ```
-or
+or Run(example presented in paper) on imagenet
+
 ```
-python train.py --lr 10e-3 --epochs 100 --batch_size 512 --channel 'AWGN' --saved ./saved --dataset cifar10 --num_workers 4 --parallel True
+python train.py --lr 10e-4 --epochs 300 --batch_size 32 --channel 'AWGN' --saved ./saved --dataset imagenet --num_workers 4 --parallel True
 ```
 ### Evaluation
 Run(example presented in paper)
