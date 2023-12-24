@@ -14,9 +14,11 @@ def main():
         path = './Dataset/ImageNet/{}'.format(phase)
         print('path is {}'.format(path))
         os.makedirs(path, exist_ok=True)
-        os.system('tar -xvf ./Dataset/ILSVRC2012_img_{}.tar -C {}'.format(phase, path))
+        print('tar -xf ./Dataset/ILSVRC2012_img_{}.tar -C {}'.format(phase, path))
+        os.system('tar -xf ./Dataset/ILSVRC2012_img_{}.tar -C {}'.format(phase, path))
         for tar in os.listdir(path):
-            os.system('tar -xvf {}/{} -C {}/{}'.format(path, tar, path, tar))
+            print('tar -xf {}/{} -C {}/{}'.format(path, tar, path, tar))
+            os.system('tar -xf {}/{} -C {}/{}'.format(path, tar, path, tar))
             os.remove('{}/{}'.format(path, tar))
 
 
