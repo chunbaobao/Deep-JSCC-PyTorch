@@ -17,8 +17,8 @@ def main():
         print('tar -xf ./Dataset/ILSVRC2012_img_{}.tar -C {}'.format(phase, path))
         os.system('tar -xf ./Dataset/ILSVRC2012_img_{}.tar -C {}'.format(phase, path))
         for tar in os.listdir(path):
-            print('tar -xf {}/{} -C {}/{}'.format(path, tar, path, tar))
-            os.system('tar -xf {}/{} -C {}/{}'.format(path, tar, path, tar))
+            print('tar -xf {}/{} -C {}/{}'.format(path, tar, path, tar.split('.')[0]))
+            os.system('tar -xf {}/{} -C {}/{}'.format(path, tar, path, tar.split('.')[0]))
             os.remove('{}/{}'.format(path, tar))
 
 
