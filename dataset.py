@@ -10,12 +10,15 @@ def main():
         raise Exception('not find dataset')
     phases = ['train', 'val']
     for phase in phases:
+        print("extracting {} dataset".format(phase))
         path = './Dataset/ImageNet/{}'.format(phase)
+        print('path is {}'.format(path))
         os.makedirs(path, exist_ok=True)
         os.system('tar -xvf ./Dataset/ILSVRC2012_img_{}.tar -C {}'.format(phase, path))
         for tar in os.listdir(path):
-            os.system('tar -xvf {}/{} -C {}/{}'.format(path, tar, path,tar))
+            os.system('tar -xvf {}/{} -C {}/{}'.format(path, tar, path, tar))
             os.remove('{}/{}'.format(path, tar))
+
 
 if __name__ == '__main__':
     main()
