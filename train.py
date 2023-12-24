@@ -125,7 +125,7 @@ def train(args: config_parser(), ratio: float, snr: float):
             model.train()
         epoch_loop.set_postfix(loss=run_loss/len(train_loader), test_mse=test_mse/len(test_loader))
     save_model(model, args.saved, args.saved +
-               '/model_{}_{:.2f}_{:.2f}_{}.pth'.format(args.dataset, ratio, snr, c))
+               '/model_{}_{}_{:.2f}_{:.2f}_{}.pth'.format(args.dataset, args.epochs,ratio, snr, c))
 
 
 def save_model(model, dir, path):

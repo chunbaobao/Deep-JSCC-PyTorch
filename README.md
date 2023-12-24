@@ -7,7 +7,7 @@ This is my first time to use PyTorch and git to reproduce a paper, so there may 
 ![architecture](./demo/arc.png)
 
 ## Demo
-I spend 3 days from 12-20 to 12-24 to reproduce the paper, and i get the result as follow. The result is not good, because i trained the model on cifar10 which is 32*32 but test on kodim which is 768*512 and the model is not trained enough. 
+I spend 3 days to reproduce the paper, and i get the result as follow. The result is not good, because i trained the model on cifar10 which is 32\*32 but test on kodim which is 768\*512 and the model is not trained enough. 
 
 That is all enough!!！
 ![demo](./demo/demo.png)
@@ -18,14 +18,14 @@ conda or other virtual environment is recommended.
 
 ```
 git clone https://github.com/chunbaobao/Deep-JSCC-PyTorch.git
-pip install requirements.txt
+cd ./Deep-JSCC-PyTorch
 ```
 
 ## Usage
 ### Training Model
 Run(example presented in paper)
 ```
-cd ./Deep-JSCC-PyTorch
+pip install requirements.txt
 ```
 
 ```
