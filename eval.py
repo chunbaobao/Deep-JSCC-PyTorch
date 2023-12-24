@@ -22,7 +22,7 @@ def config_parser():
 def main():
     args = config_parser()
     transform = transforms.Compose([transforms.ToTensor()])
-    args.saved = './saved/model_cifar10_0.33_19.00_40.pth' # to be deleted
+    # args.saved = './saved/model_cifar10_0.33_19.00_40.pth' # to be deleted
     test_image = Image.open(args.test_image)
     test_image.load()
     test_image = transform(test_image)
