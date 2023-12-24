@@ -16,7 +16,7 @@ from model import DeepJSCC, ratio2filtersize
 from torch.nn.parallel import DataParallel
 from utils import image_normalization
 from fractions import Fraction
-
+from dataset import Vanilla
 
 def config_parser():
     import argparse

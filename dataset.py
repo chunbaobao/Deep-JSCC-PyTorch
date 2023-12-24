@@ -1,4 +1,23 @@
 import os
+from torch.utils.data import Dataset
+from PIL import Image
+
+
+class Vanilla(Dataset):
+    def __init__(self, root, transform=None):
+        self.root = root
+        self.transform = transform
+        self.imgs = os.listdir(root)
+
+    def __getitem__(self, index):
+        img_path = os.path.join(self.root, self.imgs[index])
+        img = Image.open(img_path).convert('RGB')
+        if self.transform is not None:
+            img = self.transform(img)
+        return img, 0 # 0 is a fake label not important
+
+    def __len__(self):
+        return len(self.imgs)
 
 
 def main():
