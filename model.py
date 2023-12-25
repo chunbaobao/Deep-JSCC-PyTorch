@@ -32,7 +32,7 @@ def ratio2filtersize(x: torch.Tensor, ratio):
     encoder_temp = _Encoder(is_temp=True)
     z_temp = encoder_temp(x)
     c = before_size * ratio / np.prod(z_temp.size()[-2:])
-    return int(c)
+    return int(c) + 1
 
 
 class _ConvWithPReLU(nn.Module):

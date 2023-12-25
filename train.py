@@ -38,7 +38,7 @@ def config_parser():
     parser.add_argument('--dataset', default='cifar10', type=str,
                         choices=['cifar10', 'imagenet'], help='dataset')
     parser.add_argument('--parallel', default=False, type=bool, help='parallel')
-    parser.add_argument('--if_scheduler', default=True, type=bool, help='if_scheduler')
+    parser.add_argument('--if_scheduler', default=False, type=bool, help='if_scheduler')
     parser.add_argument('--step_size', default=640, type=int, help='scheduler')
     parser.add_argument('--device', default='cuda:0', type=str, help='device')
     return parser.parse_args()
@@ -52,7 +52,6 @@ def main():
     for ratio in args.ratio_list:
         for snr in args.snr_list:
             train(args, ratio, snr)
-
 
 def train(args: config_parser(), ratio: float, snr: float):
 
@@ -72,6 +71,7 @@ def train(args: config_parser(), ratio: float, snr: float):
     elif args.dataset == 'imagenet':
         transform = transforms.Compose(
             [transforms.ToTensor(), transforms.Resize((128, 128))])  # the size of paper is 128
+        print("loading data of imagenet")
         train_dataset = datasets.ImageFolder(root='./Dataset/ImageNet/train', transform=transform)
 
         train_loader = DataLoader(train_dataset, shuffle=True,
@@ -113,7 +113,7 @@ def train(args: config_parser(), ratio: float, snr: float):
             loss.backward()
             optimizer.step()
             run_loss += loss.item()
-            if args.if_scheduler:
+            if args.if_scheduler: # the scheduler is wrong before
                 scheduler.step()
         with torch.no_grad():
             model.eval()
