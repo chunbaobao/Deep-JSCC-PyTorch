@@ -10,7 +10,7 @@ This is my first time to use PyTorch and git to reproduce a paper, so there may 
 I spend 3 days to reproduce the paper, and i get the result as follow. The result is not good, because i trained the model on cifar10 which is 32\*32 but test on kodim which is 768\*512 and the model is not trained enough. 
 
 That is all enough!!！
-![demo](./demo/demo.png)
+![demo](./run/cifar10_1000_0.33_100.00_40.pth_kodim08.png)
 
 
 ## Installation
@@ -27,7 +27,7 @@ pip install requirements.txt
 Run(example presented in paper) on cifar10
 
 ```
-python train.py --lr 10e-3 --epochs 100 --batch_size 64 --channel 'AWGN' --saved ./saved --snr_list 1 4 7 13 19 --ratio_list 1/6 1/12 --dataset cifar10 --num_workers 4 --parallel True --if_scheduler True --scheduler_step_size 50
+python train.py --lr 1e-3 --epochs 1000 --batch_size 64 --channel 'AWGN' --saved ./saved --snr_list 1 4 7 13 19 --ratio_list 1/6 1/12 --dataset cifar10 --num_workers 4 --parallel True --if_scheduler True --scheduler_step_size 50
 ```
 or Run(example presented in paper) on imagenet
 

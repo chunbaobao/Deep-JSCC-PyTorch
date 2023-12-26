@@ -32,7 +32,7 @@ def ratio2filtersize(x: torch.Tensor, ratio):
     encoder_temp = _Encoder(is_temp=True)
     z_temp = encoder_temp(x)
     c = before_size * ratio / np.prod(z_temp.size()[-2:])
-    return int(c) + 1
+    return int(c)
 
 
 class _ConvWithPReLU(nn.Module):
@@ -40,6 +40,9 @@ class _ConvWithPReLU(nn.Module):
         super(_ConvWithPReLU, self).__init__()
         self.conv = nn.Conv2d(in_channels, out_channels, kernel_size, stride, padding)
         self.prelu = nn.PReLU()
+        
+        
+        nn.init.kaiming_normal_(self.conv.weight, mode='fan_out', nonlinearity='leaky_relu')
 
     def forward(self, x):
         x = self.conv(x)
@@ -53,7 +56,11 @@ class _TransConvWithPReLU(nn.Module):
         self.transconv = nn.ConvTranspose2d(
             in_channels, out_channels, kernel_size, stride, padding, output_padding)
         self.activate = activate
-
+        if activate == nn.PReLU():
+            nn.init.kaiming_normal_(self.transconv.weight, mode='fan_out', nonlinearity='leaky_relu')
+        else:
+            nn.init.xavier_normal_(self.transconv.weight)
+        
     def forward(self, x):
         x = self.transconv(x)
         x = self.activate(x)

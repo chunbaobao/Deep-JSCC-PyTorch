@@ -13,15 +13,15 @@
             "justMyCode": true,
             "args": [
                 "--lr",
-                "10e-3",
+                "1e-3",
                 "--epochs",
                 "1000",
                 "--batch_size",
-                "64",
+                "512",
                 "--if_scheduler",
-                "True",
-                "step_size",
-                "500e3",
+                "False",
+                "--step_size",
+                "500",
                 "--dataset",
                 "cifar10",
                 "--num_workers",
@@ -31,7 +31,9 @@
                 "--ratio_list",
                 "1/3",
                 "--snr_list",
-                "100"
+                "100",
+                "--seed",
+                "42"
             ]
         }
     ]

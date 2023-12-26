@@ -98,7 +98,7 @@ def train(args: config_parser(), ratio: float, snr: float):
         criterion = nn.MSELoss(reduction='mean').to(device)
     optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     if args.if_scheduler:
-        scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=args.step_size, gamma=0.1)
+        scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=args.step_size, gamma=0.5)
 
     epoch_loop = tqdm(range(args.epochs), total=args.epochs, leave=True)
     for epoch in epoch_loop:
@@ -113,8 +113,8 @@ def train(args: config_parser(), ratio: float, snr: float):
             loss.backward()
             optimizer.step()
             run_loss += loss.item()
-            if args.if_scheduler: # the scheduler is wrong before
-                scheduler.step()
+        if args.if_scheduler: # the scheduler is wrong before
+            scheduler.step()
         with torch.no_grad():
             model.eval()
             test_mse = 0.0
@@ -127,8 +127,8 @@ def train(args: config_parser(), ratio: float, snr: float):
                 test_mse += loss.item()
             model.train()
         epoch_loop.set_postfix(loss=run_loss/len(train_loader), test_mse=test_mse/len(test_loader))
-        print("epoch: {}, loss: {:.4f}, test_mse: {:.4f}".format(
-            epoch, run_loss/len(train_loader), test_mse/len(test_loader)))
+        print("epoch: {}, loss: {:.4f}, test_mse: {:.4f} lr:{}".format(
+            epoch, run_loss/len(train_loader), test_mse/len(test_loader), optimizer.param_groups[0]['lr']))
     save_model(model, args.saved, args.saved +
                '/{}_{}_{:.2f}_{:.2f}_{}.pth'.format(args.dataset, args.epochs, ratio, snr, c))
 

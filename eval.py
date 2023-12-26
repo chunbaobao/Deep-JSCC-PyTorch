@@ -22,7 +22,6 @@ def config_parser():
 def main():
     args = config_parser()
     transform = transforms.Compose([transforms.ToTensor()])
-    args.saved = './saved/cifar10_50_0.33_100.00_41.pth' # to be deleted
     test_image = Image.open(args.test_image)
     test_image.load()
     test_image = transform(test_image)
@@ -43,7 +42,7 @@ def main():
     demo_image = torch.cat([test_image, demo_image], dim=1)
     demo_image = transforms.ToPILImage()(demo_image)
     temp = args.saved.split('/')[-1]
-    demo_image.save('./run/{}.png'.format(args.saved.split('/')[-1]))
+    demo_image.save('./run/{}_{}'.format(args.saved.split('/')[-1],args.test_image.split('/')[-1]))
     print("psnr on {} is {}".format(args.test_image, psnr_all / args.times))
 
 
