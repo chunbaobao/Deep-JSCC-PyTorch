@@ -7,10 +7,12 @@ This is my first time to use PyTorch and git to reproduce a paper, so there may 
 ![architecture](./demo/arc.png)
 
 ## Demo
-I spend 3 days to reproduce the paper, and i get the result as follow. The result is not good, because i trained the model on cifar10 which is 32\*32 but test on kodim which is 768\*512 and the model is not trained enough. 
 
-That is all enough!!！
-![demo](./run/cifar10_1000_0.33_100.00_40.pth_kodim08.png)
+the model trained on cifar10 which is 32\*32 but test on kodim which is 768\*512.
+![demo1](./run/cifar10_3000_0.33_100.00_256_40.pth_kodim08.png)
+
+the model trained on imagenet which is resized to 128\*128 but test on kodim which is 768\*512.
+![demo2](./run/imagenet_10_0.33_200.00_32_19.pth_kodim08.png)
 
 
 ## Installation
