@@ -34,14 +34,15 @@ def main():
     model.change_channel(args.channel, args.snr)
 
     psnr_all = 0.0
-    demo_image = model(test_image)
-    demo_image = image_normalization('denormalization')(demo_image)
-    gt = image_normalization('denormalization')(test_image)
+    
     for i in range(args.times):
+        demo_image = model(test_image)
+        demo_image = image_normalization('denormalization')(demo_image)
+        gt = image_normalization('denormalization')(test_image)
         psnr_all += get_psnr(demo_image, gt)
+    demo_image = image_normalization('normalization')(demo_image)
     demo_image = torch.cat([test_image, demo_image], dim=1)
     demo_image = transforms.ToPILImage()(demo_image)
-    temp = args.saved.split('/')[-1]
     demo_image.save('./run/{}_{}'.format(args.saved.split('/')[-1],args.test_image.split('/')[-1]))
     print("psnr on {} is {}".format(args.test_image, psnr_all / args.times))
 

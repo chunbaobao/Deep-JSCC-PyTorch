@@ -19,7 +19,7 @@
                 "--batch_size",
                 "512",
                 "--if_scheduler",
-                "False",
+                "1",
                 "--step_size",
                 "500",
                 "--dataset",

@@ -17,6 +17,15 @@ from torch.nn.parallel import DataParallel
 from utils import image_normalization
 from fractions import Fraction
 from dataset import Vanilla
+import numpy as np
+
+def set_seed(seed):
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 
 def config_parser():
@@ -41,13 +50,17 @@ def config_parser():
     parser.add_argument('--if_scheduler', default=False, type=bool, help='if_scheduler')
     parser.add_argument('--step_size', default=640, type=int, help='scheduler')
     parser.add_argument('--device', default='cuda:0', type=str, help='device')
+    parser.add_argument('--gamma', default=0.5, type=float, help='gamma')
+    parser.add_argument('--disable_tqdm', default=True, type=bool, help='disable_tqdm')
     return parser.parse_args()
+
 
 
 def main():
     args = config_parser()
     args.snr_list = list(map(float, args.snr_list))
     args.ratio_list = list(map(lambda x: float(Fraction(x)), args.ratio_list))
+    set_seed(args.seed)
     print("Training Start")
     for ratio in args.ratio_list:
         for snr in args.snr_list:
@@ -81,9 +94,8 @@ def train(args: config_parser(), ratio: float, snr: float):
                                  batch_size=args.batch_size, num_workers=args.num_workers)
     else:
         raise Exception('Unknown dataset')
-
-    print("training with ratio: {:.2f}, snr_db: {}, channel: {}".format(ratio, snr, args.channel))
-
+    
+    print(args)
     image_fisrt = train_dataset.__getitem__(0)[0]
     c = ratio2filtersize(image_fisrt, ratio)
     print("the inner channel is {}".format(c))
@@ -98,12 +110,12 @@ def train(args: config_parser(), ratio: float, snr: float):
         criterion = nn.MSELoss(reduction='mean').to(device)
     optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     if args.if_scheduler:
-        scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=args.step_size, gamma=0.5)
+        scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=args.step_size, gamma=args.gamma)
 
-    epoch_loop = tqdm(range(args.epochs), total=args.epochs, leave=True)
+    epoch_loop = tqdm(range(args.epochs), total=args.epochs, leave=True, disable=args.disable_tqdm)
     for epoch in epoch_loop:
         run_loss = 0.0
-        for images, _ in tqdm((train_loader), leave=False):
+        for images, _ in tqdm((train_loader), leave=False, disable=args.disable_tqdm):
             optimizer.zero_grad()
             images = images.cuda() if args.parallel else images.to(device)
             outputs = model(images)
@@ -118,7 +130,7 @@ def train(args: config_parser(), ratio: float, snr: float):
         with torch.no_grad():
             model.eval()
             test_mse = 0.0
-            for images, _ in tqdm((test_loader), leave=False):
+            for images, _ in tqdm((test_loader), leave=False, disable=args.disable_tqdm):
                 images = images if args.parallel else images.to(device)
                 outputs = model(images)
                 images = image_normalization('denormalization')(images)
@@ -126,15 +138,22 @@ def train(args: config_parser(), ratio: float, snr: float):
                 loss = criterion(outputs, images)
                 test_mse += loss.item()
             model.train()
-        epoch_loop.set_postfix(loss=run_loss/len(train_loader), test_mse=test_mse/len(test_loader))
-        print("epoch: {}, loss: {:.4f}, test_mse: {:.4f} lr:{}".format(
+        # epoch_loop.set_postfix(loss=run_loss/len(train_loader), test_mse=test_mse/len(test_loader))
+        print("epoch: {}, loss: {:.4f}, test_mse: {:.4f}, lr:{}".format(
             epoch, run_loss/len(train_loader), test_mse/len(test_loader), optimizer.param_groups[0]['lr']))
     save_model(model, args.saved, args.saved +
-               '/{}_{}_{:.2f}_{:.2f}_{}.pth'.format(args.dataset, args.epochs, ratio, snr, c))
+               '/{}_{}_{:.2f}_{:.2f}_{}_{}.pth'.format(args.dataset, args.epochs, ratio, snr, args.batch_size,c))
 
 
 def save_model(model, dir, path):
     os.makedirs(dir, exist_ok=True)
+    flag = 1
+    while True:
+        if os.path.exists(path):
+            path = path+'_'+str(flag)
+            flag += 1
+        else:
+            break
     torch.save(model.state_dict(), path)
     print("Model saved in {}".format(path))
 
