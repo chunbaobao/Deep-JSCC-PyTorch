@@ -5,4 +5,5 @@ Dataset/*
 *.ipynb
 *.swp
 .vscode/*
-
+input.txt
+output.txt
