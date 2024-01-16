@@ -1,5 +1,5 @@
 # Deep JSCC
-This implements training of deep JSCC models for wireless image transmission as described in the paper [Deep Joint Source-Channel Coding for Wireless Image Transmission](https://ieeexplore.ieee.org/abstract/document/8723589) by PyTorch. And there has been a [Tensorflow and keras implementations ](https://github.com/irdanish11/DJSCC-for-Wireless-Image-Transmission).
+This implements training of deep JSCC models for wireless image transmission as described in the paper [Deep Joint Source-Channel Coding for Wireless Image Transmission](https://ieeexplore.ieee.org/abstract/document/8723589) by Pytorch. And there has been a [Tensorflow and keras implementations ](https://github.com/irdanish11/DJSCC-for-Wireless-Image-Transmission).
 
 This is my first time to use PyTorch and git to reproduce a paper, so there may be some mistakes. If you find any, please let me know. Thanks!
 ## Architecture
@@ -25,6 +25,12 @@ pip install requirements.txt
 ```
 
 ## Usage
+### Prepare Dataset
+The cifar10 dataset can be downloaded automatically by torchvision. But the imagenet dataset should be downloaded manually and put in the right place, refer to [dataset.py](https://github.com/chunbaobao/Deep-JSCC-PyTorch/blob/main/dataset.py#L28). And run:
+```
+python dataset.py 
+```
+
 ### Training Model
 Run(example presented in paper) on cifar10
 
