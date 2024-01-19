@@ -45,7 +45,7 @@ python train.py --lr 10e-4 --epochs 300 --batch_size 32 --channel 'AWGN' --saved
 ### Evaluation
 Run(example presented in paper)
 ```
-python eval.py --channel 'AWGN' --saved ./saved/${mode_path} --snr 20 --ratio_list 1/3 --test_img ./test_image ./demo/kodim08.png
+python eval.py --channel 'AWGN' --saved ./saved/${mode_path} --snr 20 --ratio_list 1/3 --test_img ${test_img_path}
 ```
 
 
