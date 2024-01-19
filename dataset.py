@@ -23,9 +23,10 @@ class Vanilla(Dataset):
 def main():
     data_path = './Dataset'
     os.makedirs(data_path, exist_ok=True)
-
+    # ILSVRC2012_img_train.tar and ILSVRC2012_img_val.tar should be downloaded from https://image-net.org/
     if not os.path.exists('./Dataset/ILSVRC2012_img_train.tar') or not os.path.exists('./Dataset/ILSVRC2012_img_val.tar'):
-        print('Please download the dataset from http://www.image-net.org/challenges/LSVRC/2012/downloads and put it in ./Dataset')
+        print('ILSVRC2012_img_train.tar and ILSVRC2012_img_val.tar should be downloaded from https://image-net.org/')
+        print('Please download the dataset from https://image-net.org/challenges/LSVRC/2012/2012-downloads and put it in ./Dataset')
         raise Exception('not find dataset')
     phases = ['train', 'val']
     for phase in phases:

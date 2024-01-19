@@ -26,7 +26,7 @@ pip install requirements.txt
 
 ## Usage
 ### Prepare Dataset
-The cifar10 dataset can be downloaded automatically by torchvision. But the imagenet dataset should be downloaded manually and put in the right place, refer to [dataset.py](https://github.com/chunbaobao/Deep-JSCC-PyTorch/blob/main/dataset.py#L28). And run:
+The cifar10 dataset can be downloaded automatically by torchvision. But the imagenet dataset should be downloaded manually from [ImageNet website](https://image-net.org/) and put in the right place, refer to [dataset.py](https://github.com/chunbaobao/Deep-JSCC-PyTorch/blob/main/dataset.py#L28). And run:
 ```
 python dataset.py 
 ```
