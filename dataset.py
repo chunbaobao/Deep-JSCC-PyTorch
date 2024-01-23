@@ -21,21 +21,21 @@ class Vanilla(Dataset):
 
 
 def main():
-    data_path = './Dataset'
+    data_path = './dataset'
     os.makedirs(data_path, exist_ok=True)
     # ILSVRC2012_img_train.tar and ILSVRC2012_img_val.tar should be downloaded from https://image-net.org/
-    if not os.path.exists('./Dataset/ILSVRC2012_img_train.tar') or not os.path.exists('./Dataset/ILSVRC2012_img_val.tar'):
+    if not os.path.exists('./dataset/ILSVRC2012_img_train.tar') or not os.path.exists('./dataset/ILSVRC2012_img_val.tar'):
         print('ILSVRC2012_img_train.tar and ILSVRC2012_img_val.tar should be downloaded from https://image-net.org/')
-        print('Please download the dataset from https://image-net.org/challenges/LSVRC/2012/2012-downloads and put it in ./Dataset')
+        print('Please download the dataset from https://image-net.org/challenges/LSVRC/2012/2012-downloads and put it in ./dataset')
         raise Exception('not find dataset')
     phases = ['train', 'val']
     for phase in phases:
         print("extracting {} dataset".format(phase))
-        path = './Dataset/ImageNet/{}'.format(phase)
+        path = './dataset/ImageNet/{}'.format(phase)
         print('path is {}'.format(path))
         os.makedirs(path, exist_ok=True)
-        print('tar -xf ./Dataset/ILSVRC2012_img_{}.tar -C {}'.format(phase, path))
-        os.system('tar -xf ./Dataset/ILSVRC2012_img_{}.tar -C {}'.format(phase, path))
+        print('tar -xf ./dataset/ILSVRC2012_img_{}.tar -C {}'.format(phase, path))
+        os.system('tar -xf ./dataset/ILSVRC2012_img_{}.tar -C {}'.format(phase, path))
         if phase == 'train':
             for tar in os.listdir(path):
                 print('tar -xf {}/{} -C {}/{}'.format(path, tar, path, tar.split('.')[0]))

@@ -12,7 +12,7 @@ if __name__ == '__main__':
     ])
 
     trainset = torchvision.datasets.CIFAR10(
-        root='./Dataset/',
+        root='./dataset/',
         train=True,  # 如果为True，从 training.pt 创建数据，否则从 test.pt 创建数据。
         download=True,  # 如果为true，则从 Internet 下载数据集并将其放在根目录中。 如果已下载数据集，则不会再次下载。
         transform=transform

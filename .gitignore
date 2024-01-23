@@ -1,9 +1,10 @@
 test.py
 *.pyc
 *.log
-Dataset/*
+dataset
 *.ipynb
 *.swp
 .vscode/*
 input.txt
 output.txt
+*.json

@@ -72,12 +72,12 @@ def train(args: config_parser(), ratio: float, snr: float):
     # load data
     if args.dataset == 'cifar10':
         transform = transforms.Compose([transforms.ToTensor(), ])
-        train_dataset = datasets.CIFAR10(root='./Dataset/', train=True,
+        train_dataset = datasets.CIFAR10(root='./dataset/', train=True,
                                          download=True, transform=transform)
 
         train_loader = DataLoader(train_dataset, shuffle=True,
                                   batch_size=args.batch_size, num_workers=args.num_workers)
-        test_dataset = datasets.CIFAR10(root='./Dataset/', train=False,
+        test_dataset = datasets.CIFAR10(root='./dataset/', train=False,
                                         download=True, transform=transform)
         test_loader = DataLoader(test_dataset, shuffle=True,
                                  batch_size=args.batch_size, num_workers=args.num_workers)
@@ -85,11 +85,11 @@ def train(args: config_parser(), ratio: float, snr: float):
         transform = transforms.Compose(
             [transforms.ToTensor(), transforms.Resize((128, 128))])  # the size of paper is 128
         print("loading data of imagenet")
-        train_dataset = datasets.ImageFolder(root='./Dataset/ImageNet/train', transform=transform)
+        train_dataset = datasets.ImageFolder(root='./dataset/ImageNet/train', transform=transform)
 
         train_loader = DataLoader(train_dataset, shuffle=True,
                                   batch_size=args.batch_size, num_workers=args.num_workers)
-        test_dataset = Vanilla(root='./Dataset/ImageNet/val', transform=transform)
+        test_dataset = Vanilla(root='./dataset/ImageNet/val', transform=transform)
         test_loader = DataLoader(test_dataset, shuffle=True,
                                  batch_size=args.batch_size, num_workers=args.num_workers)
     else:
