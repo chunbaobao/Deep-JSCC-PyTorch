@@ -14,7 +14,7 @@ class Vanilla(Dataset):
         img = Image.open(img_path).convert('RGB')
         if self.transform is not None:
             img = self.transform(img)
-        return img, 0 # 0 is a fake label not important
+        return img, 0  # 0 is a fake label not important
 
     def __len__(self):
         return len(self.imgs)

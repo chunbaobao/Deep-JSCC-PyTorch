@@ -19,6 +19,7 @@ from fractions import Fraction
 from dataset import Vanilla
 import numpy as np
 
+
 def set_seed(seed):
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -55,7 +56,6 @@ def config_parser():
     return parser.parse_args()
 
 
-
 def main():
     args = config_parser()
     args.snr_list = list(map(float, args.snr_list))
@@ -65,6 +65,7 @@ def main():
     for ratio in args.ratio_list:
         for snr in args.snr_list:
             train(args, ratio, snr)
+
 
 def train(args: config_parser(), ratio: float, snr: float):
 
@@ -94,7 +95,7 @@ def train(args: config_parser(), ratio: float, snr: float):
                                  batch_size=args.batch_size, num_workers=args.num_workers)
     else:
         raise Exception('Unknown dataset')
-    
+
     print(args)
     image_fisrt = train_dataset.__getitem__(0)[0]
     c = ratio2filtersize(image_fisrt, ratio)
@@ -125,7 +126,7 @@ def train(args: config_parser(), ratio: float, snr: float):
             loss.backward()
             optimizer.step()
             run_loss += loss.item()
-        if args.if_scheduler: # the scheduler is wrong before
+        if args.if_scheduler:  # the scheduler is wrong before
             scheduler.step()
         with torch.no_grad():
             model.eval()
@@ -142,7 +143,7 @@ def train(args: config_parser(), ratio: float, snr: float):
         print("epoch: {}, loss: {:.4f}, test_mse: {:.4f}, lr:{}".format(
             epoch, run_loss/len(train_loader), test_mse/len(test_loader), optimizer.param_groups[0]['lr']))
     save_model(model, args.saved, args.saved +
-               '/{}_{}_{:.2f}_{:.2f}_{}_{}.pth'.format(args.dataset, args.epochs, ratio, snr, args.batch_size,c))
+               '/{}_{}_{:.2f}_{:.2f}_{}_{}.pth'.format(args.dataset, args.epochs, ratio, snr, args.batch_size, c))
 
 
 def save_model(model, dir, path):

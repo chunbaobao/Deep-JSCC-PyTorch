@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+
 def channel(channel_type='AWGN', snr=20):
     def AWGN_channel(z_hat: torch.Tensor):
         if z_hat.dim() == 4:
@@ -11,7 +12,7 @@ def channel(channel_type='AWGN', snr=20):
             # k = np.prod(z_hat.size())
             k = torch.prod(torch.tensor(z_hat.size()))
             sig_pwr = torch.sum(torch.abs(z_hat).square())/k
-        noi_pwr = sig_pwr / ( 10 ** (snr / 10))
+        noi_pwr = sig_pwr / (10 ** (snr / 10))
         noise = torch.randn_like(z_hat) * torch.sqrt(noi_pwr)
         return z_hat + noise
 

@@ -42,8 +42,7 @@ class _ConvWithPReLU(nn.Module):
         super(_ConvWithPReLU, self).__init__()
         self.conv = nn.Conv2d(in_channels, out_channels, kernel_size, stride, padding)
         self.prelu = nn.PReLU()
-        
-        
+
         nn.init.kaiming_normal_(self.conv.weight, mode='fan_out', nonlinearity='leaky_relu')
 
     def forward(self, x):
@@ -62,7 +61,7 @@ class _TransConvWithPReLU(nn.Module):
             nn.init.kaiming_normal_(self.transconv.weight, mode='fan_out', nonlinearity='leaky_relu')
         else:
             nn.init.xavier_normal_(self.transconv.weight)
-        
+
     def forward(self, x):
         x = self.transconv(x)
         x = self.activate(x)
@@ -70,7 +69,7 @@ class _TransConvWithPReLU(nn.Module):
 
 
 class _Encoder(nn.Module):
-    def __init__(self, c=1, is_temp=False,P=1):
+    def __init__(self, c=1, is_temp=False, P=1):
         super(_Encoder, self).__init__()
         self.is_temp = is_temp
         # self.imgae_normalization = _image_normalization(norm_type='nomalization')
