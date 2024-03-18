@@ -15,7 +15,7 @@
                 "--lr",
                 "1e-3",
                 "--epochs",
-                "1000",
+                "100",
                 "--batch_size",
                 "512",
                 "--if_scheduler",
@@ -27,13 +27,15 @@
                 "--num_workers",
                 "4",
                 "--device",
-                "cuda:1",
+                "cuda:0",
                 "--ratio_list",
                 "1/3",
                 "--snr_list",
                 "100",
                 "--seed",
-                "42"
+                "42",
+                "--disable_tqdm",
+                "False"
             ]
         }
     ]

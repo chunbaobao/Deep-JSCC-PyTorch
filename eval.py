@@ -30,7 +30,8 @@ def main():
     c = file_name.split('_')[-1].split('.')[0]
     c = int(c)
     model = DeepJSCC(c=c, channel_type=args.channel, snr=args.snr)
-    model.load_state_dict(torch.load(args.saved))
+    # model.load_state_dict(torch.load(args.saved))
+    model.load_state_dict(torch.load(args.saved,map_location=torch.device('cuda:0')))
     model.change_channel(args.channel, args.snr)
 
     psnr_all = 0.0

@@ -8,3 +8,4 @@ dataset
 input.txt
 output.txt
 *.json
+.vscode/*

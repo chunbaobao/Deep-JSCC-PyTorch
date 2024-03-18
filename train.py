@@ -73,12 +73,12 @@ def train(args: config_parser(), ratio: float, snr: float):
     # load data
     if args.dataset == 'cifar10':
         transform = transforms.Compose([transforms.ToTensor(), ])
-        train_dataset = datasets.CIFAR10(root='./dataset/', train=True,
+        train_dataset = datasets.CIFAR10(root='../dataset/', train=True,
                                          download=True, transform=transform)
 
         train_loader = DataLoader(train_dataset, shuffle=True,
                                   batch_size=args.batch_size, num_workers=args.num_workers)
-        test_dataset = datasets.CIFAR10(root='./dataset/', train=False,
+        test_dataset = datasets.CIFAR10(root='../dataset/', train=False,
                                         download=True, transform=transform)
         test_loader = DataLoader(test_dataset, shuffle=True,
                                  batch_size=args.batch_size, num_workers=args.num_workers)

@@ -47,7 +47,9 @@ Run(example presented in paper)
 ```
 python eval.py --channel 'AWGN' --saved ./saved/${mode_path} --snr 20 --ratio_list 1/3 --test_img ${test_img_path}
 ```
-
+### TO-DO
+- Add visualization of the model
+- plot the results with different snr and ratio
 
 ## Citation
 If you find (part of) this code useful for your research, please consider citing
