@@ -24,9 +24,9 @@ This is my first time to use PyTorch and git to reproduce a paper, so there may 
 
 The model trained on cifar10 which is 32\*32 but test on kodim which is 768\*512 (left); and the model trained on imagenet which is resized to 128\*128 but test on kodim which is 768\*512 (right).
 <div style="display: flex;">
-  <img src="./demo/cifar10_kodim08.png" alt="Image 1" style="flex: 1; max-width: 100%; height: auto;">
-  <div style="width: 20px;"></div> 
-  <img src="./demo/imagenet_kodim08.png" alt="Image 2" style="flex: 1; max-width: 100%; height: auto;">
+  <img src="./demo/cifar10_kodim08.png" alt="Image 1" style="flex: 1; max-width: 48%; height: auto;">
+  <div style="width: 5px;"></div> 
+  <img src="./demo/imagenet_kodim08.png" alt="Image 2" style="flex: 1; max-width: 48%; height: auto;">
 </div>
 
 
@@ -115,9 +115,9 @@ Model results and logs for the **CIFAR-10** dataset, tested under various SNR, r
 
  
 <div style="display: flex;">
-  <img src="demo/cifar_0.08.png" alt="Image 1" style="flex: 1; max-width: 50%; height: auto;">
+  <img src="demo/cifar_0.08.png" alt="Image 1" style="flex: 1; max-width: 48%; height: auto;">
   <div style="width: 0px;"></div> <!-- 为了让两个图像之间有一点间距 -->
-  <img src="demo/cifar_0.17.png" alt="Image 2" style="flex: 1; max-width: 50%; height: auto;">
+  <img src="demo/cifar_0.17.png" alt="Image 2" style="flex: 1; max-width: 48%; height: auto;">
 </div>
 
 
