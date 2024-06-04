@@ -111,7 +111,7 @@ The `./visualization` directory contains the scripts for visualization of the tr
 
 ## Results
 
-Model results and logs for the **CIFAR-10** dataset, tested under various SNR, ratio, and channel types, are available in the `./out` directory. The models' performance is approximately 5dB worse than reported in the paper, likely due to the implementation reflecting a real communication system. However, the performance trends are consistent with those in the paper.
+Model results and logs for the **CIFAR-10** dataset, tested under various SNR, ratio, and channel types, are available in the `./out` directory. The models' performance is approximately 5dB worse than reported in the paper, likely due to the implementation reflecting a real communication system. However, the performance trends are consistent with those in the paper. Refer to [Issue #7](../../issues/7).
 
  
 <div style="display: flex;">
