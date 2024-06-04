@@ -24,12 +24,11 @@ This is my first time to use PyTorch and git to reproduce a paper, so there may 
 
 The model trained on cifar10 which is 32\*32 but test on kodim which is 768\*512 (left); and the model trained on imagenet which is resized to 128\*128 but test on kodim which is 768\*512 (right).
 <div style="display: flex;">
-
-  <img src="./demo/cifar10_kodim08.png" alt="Image 1" style="flex: 1;" width="150" height="450">
+  <img src="./demo/cifar10_kodim08.png" alt="Image 1" style="flex: 1; max-width: 100%; height: auto;">
   <div style="width: 20px;"></div> 
-  <img src="./demo/imagenet_kodim08.png" alt="Image 1" style="flex: 1;" width="150" height="450">
-    
+  <img src="./demo/imagenet_kodim08.png" alt="Image 2" style="flex: 1; max-width: 100%; height: auto;">
 </div>
+
 
 ## Installation
 conda or other virtual environment is recommended.
