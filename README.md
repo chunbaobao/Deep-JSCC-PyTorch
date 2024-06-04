@@ -1,19 +1,35 @@
 # Deep JSCC
-This implements training of deep JSCC models for wireless image transmission as described in the paper [Deep Joint Source-Channel Coding for Wireless Image Transmission](https://ieeexplore.ieee.org/abstract/document/8723589) by Pytorch. And there has been a [Tensorflow and keras implementations ](https://github.com/irdanish11/DJSCC-for-Wireless-Image-Transmission).
+This implements training of Deep JSCC models for wireless image transmission as described in the paper [Deep Joint Source-Channel Coding for Wireless Image Transmission](https://ieeexplore.ieee.org/abstract/document/8723589) by Pytorch. And there has been a [Tensorflow and keras implementations ](https://github.com/irdanish11/DJSCC-for-Wireless-Image-Transmission).
 
 This is my first time to use PyTorch and git to reproduce a paper, so there may be some mistakes. If you find any, please let me know. Thanks!
+
+
+
+## Update-2024.06.04
+- modify the `train.py` to omit most of the args in command line, you can just us `python train.py --dataset ${dataset_name}` to train the model.
+- add tensorboard to record the results in exp.
+- add the `visualization/` file to visualize the result.
+- add bash file to run the code in parallel.
+
+
+
 ## Architecture
 
-![architecture](./demo/arc.png)
+<div style="text-align: center;">
+    <img src="./demo/arc.png" alt="Image 1" style="width: 500px; height: 250px;">
+</div>
 
 ## Demo
 
-the model trained on cifar10 which is 32\*32 but test on kodim which is 768\*512.
-![demo1](./run/cifar10_3000_0.33_100.00_256_40.pth_kodim08.png)
 
-the model trained on imagenet which is resized to 128\*128 but test on kodim which is 768\*512.
-![demo2](./run/imagenet_10_0.33_200.00_32_19.pth_kodim08.png)
+The model trained on cifar10 which is 32\*32 but test on kodim which is 768\*512 (left); and the model trained on imagenet which is resized to 128\*128 but test on kodim which is 768\*512 (right).
+<div style="display: flex;">
 
+  <img src="./demo/cifar10_kodim08.png" alt="Image 1" style="flex: 1;" width="150" height="450">
+  <div style="width: 20px;"></div> 
+  <img src="./demo/imagenet_kodim08.png" alt="Image 1" style="flex: 1;" width="150" height="450">
+    
+</div>
 
 ## Installation
 conda or other virtual environment is recommended.
@@ -31,25 +47,88 @@ The cifar10 dataset can be downloaded automatically by torchvision. But the imag
 python dataset.py 
 ```
 
-### Training Model
-Run(example presented in paper) on cifar10
+### Training
+The training command used to be very long, but now you can just use `python train.py --dataset ${dataset_name} --channel ${channel}` to train the model. 
+The default dataset is cifar10.
+The parmeters can be modified in the `train.py` file. The default parameters are similar to the paper.
 
-```
-python train.py --lr 1e-3 --epochs 1000 --batch_size 64 --channel 'AWGN' --saved ./saved --snr_list 1 4 7 13 19 --ratio_list 1/6 1/12 --dataset cifar10 --num_workers 4 --parallel True --if_scheduler True --scheduler_step_size 50
-```
-or Run(example presented in paper) on imagenet
 
+| Parameters                   | CIFAR-10         | ImageNet         |
+|------------------------|------------------|------------------|
+| `batch_size`           | 64               | 32               |
+| `init_lr`              | 1e-3             | 1e-4             |
+| `weight_decay`         | 5e-4             | 5e-4             |
+| `snr_list`             | [19, 13, 7, 4, 1]| [19, 13, 7, 4, 1]|
+| `ratio_list`           | [1/6, 1/12]      | [1/6, 1/12]      |
+| `if_scheduler`         | True             | False            |
+| `step_size`            | 640              | N/A              |
+| `gamma`                | 0.1              | 0.1              |
+
+
+
+<!-- ALSO! The batch_size for cifar10 training in the paper is small causing the GPU utilization is low. So The bash script is provided to run the code in parallel for different snr and ratio for cifar10 dataset. (Example of two GPUs)
 ```
-python train.py --lr 10e-4 --epochs 300 --batch_size 32 --channel 'AWGN' --saved ./saved --dataset imagenet --num_workers 4 --parallel True
-```
+bash parallel_train_cifar.sh --channel ${channel}
+``` -->
+
+
+
 ### Evaluation
-Run(example presented in paper)
+The `eval.py` provides the evaluation of the trained model. 
+
+You may need modify slightly to evaluate the model for different snr_list and channel type in `main` function. 
 ```
-python eval.py --channel 'AWGN' --saved ./saved/${mode_path} --snr 20 --test_img ${test_img_path}
+python eval.py
 ```
+All training and evaluation results are saved in the `./out` directory by default. The `./out` directory may contain the structure as follows:
+```
+./out
+├── checkpoint # trained models
+│   ├── $DATASETNAME_$INNERCHANNEL_$SNR_$RATIO_$CHANNEL_TYPE_$TIMES_on_$DATE
+│       ├── epoch_$num.pth
+│       ├── ...
+│   ├── CIFAR10_10_1.0_0.08_AWGN_13h21m37s_on_Jun_02_2024
+│   ├── CIFAR10_20_7.0_0.17_Rayleigh_14h03m19s_on_Jun_03_2024
+│   ├── ...
+├── configs # training configurations
+│   ├── $DATASETNAME_$INNERCHANNEL_$SNR_$RATIO_$CHANNEL_TYPE_$TIMES_on_$DATE
+│   ├── $CIFAR10_10_4.0_0.08_AWGN_13h21m38s_on_Jun_02_2024.yaml
+│   ├── ...
+├── logs # training logs
+│   ├── $DATASETNAME_$INNERCHANNEL_$SNR_$RATIO_$CHANNEL_TYPE_$TIMES_on_$DATE
+│       ├── tensorboard logs
+│   ├── ...
+├── eval # evaluation results
+│   ├── $DATASETNAME_$INNERCHANNEL_$SNR_$RATIO_$CHANNEL_TYPE_$TIMES_on_$DATE
+│       ├── tensorboard logs
+│   ├── ...
+```
+### Visualization
+
+The `./visualization` directory contains the scripts for visualization of the training and evaluation results.
+
+- `single_visualization.ipynb` is used to get demo of the model on single image like the demo above.
+- `plot_visualization.ipynb` is used to get visualizations of the perfprmance of the model on different snr and ratio.
+
+## Results
+
+Model results and logs for the **CIFAR-10** dataset, tested under various SNR, ratio, and channel types, are available in the `./out` directory. The models' performance is approximately 5dB worse than reported in the paper, likely due to the implementation reflecting a real communication system. However, the performance trends are consistent with those in the paper.
+
+ 
+<div style="display: flex;">
+  <img src="demo/cifar_0.08.png" alt="Image 1" style="flex: 1; max-width: 50%; height: auto;">
+  <div style="width: 0px;"></div> <!-- 为了让两个图像之间有一点间距 -->
+  <img src="demo/cifar_0.17.png" alt="Image 2" style="flex: 1; max-width: 50%; height: auto;">
+</div>
+
+
+
 ### TO-DO
-- Add visualization of the model
-- plot the results with different snr and ratio
+- ~~Add visualization of the model~~
+- ~~plot the results with different snr and ratio~~
+- ~~add Rayleigh channel~~
+- train on imagenet
+- **Convert the real communication system to a complex communication system**
 
 ## Citation
 If you find (part of) this code useful for your research, please consider citing

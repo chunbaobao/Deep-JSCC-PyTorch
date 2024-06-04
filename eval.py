@@ -1,51 +1,75 @@
-# to be implemented
 import torch
-import torch.nn as nn
-from PIL import Image
-from torchvision import transforms
-from utils import get_psnr, image_normalization
+from utils import get_psnr
 import os
 from model import DeepJSCC
+from train import evaluate_epoch
+from torchvision import transforms
+from torchvision import datasets
+from torch.utils.data import DataLoader
+from dataset import Vanilla
+import yaml
+from tensorboardX import SummaryWriter
+import glob
+from concurrent.futures import ProcessPoolExecutor
+
+def eval_snr(model, test_loader, writer, param, times=10):
+    snr_list = range(0, 26, 1)
+    for snr in snr_list:
+        model.change_channel(param['channel'], snr)
+        test_loss = 0
+        for i in range(times):
+            test_loss += evaluate_epoch(model, param, test_loader)
+
+        test_loss /= times
+        psnr = get_psnr(image=None, gt=None, mse=test_loss)
+        writer.add_scalar('psnr', psnr, snr)
+        
 
 
-def config_parser():
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--channel', default='AWGN', type=str, help='channel type')
-    parser.add_argument('--saved', type=str, help='saved_path')
-    parser.add_argument('--snr', default=20, type=int, help='snr')
-    parser.add_argument('--test_image', default='./demo/kodim08.png', type=str, help='demo_image')
-    parser.add_argument('--times', default=10, type=int, help='num_workers')
-    return parser.parse_args()
+def process_config(config_path, output_dir, dataset_name, times):
+    with open(config_path, 'r') as f:
+        config = yaml.load(f, Loader=yaml.UnsafeLoader)
+        assert dataset_name == config['dataset_name']
+        params = config['params']
+        c = config['inner_channel']
 
+    if dataset_name == 'cifar10':
+        transform = transforms.Compose([transforms.ToTensor(), ])
+        test_dataset = datasets.CIFAR10(root='../dataset/', train=False,
+                                        download=True, transform=transform)
+        test_loader = DataLoader(test_dataset, shuffle=True,
+                                 batch_size=params['batch_size'], num_workers=params['num_workers'])
+
+    elif dataset_name == 'imagenet':
+        transform = transforms.Compose(
+            [transforms.ToTensor(), transforms.Resize((128, 128))])  # the size of paper is 128
+        
+        test_dataset = Vanilla(root='../dataset/ImageNet/val', transform=transform)
+        test_loader = DataLoader(test_dataset, shuffle=True,
+                                 batch_size=params['batch_size'], num_workers=params['num_workers'])
+    else:
+        raise Exception('Unknown dataset')
+
+    name = os.path.splitext(os.path.basename(config_path))[0]
+    writer = SummaryWriter(os.path.join(output_dir, 'eval', name))
+    model = DeepJSCC(c=c)
+    model = model.to(params['device'])
+    pkl_list = glob.glob(os.path.join(output_dir, 'checkpoints', name, '*.pkl'))
+    model.load_state_dict(torch.load(pkl_list[-1]))
+    eval_snr(model, test_loader, writer, params, times)
+    writer.close()
 
 def main():
-    args = config_parser()
-    transform = transforms.Compose([transforms.ToTensor()])
-    test_image = Image.open(args.test_image)
-    test_image.load()
-    test_image = transform(test_image)
+    times = 10
+    dataset_name = 'cifar10'
+    output_dir = './out'
+    channel_type = 'AWGN'
+    config_dir = os.path.join(output_dir, 'configs')
+    config_files = [os.path.join(config_dir, name) for name in os.listdir(config_dir)
+                    if (dataset_name in name or dataset_name.upper() in name) and channel_type in name and name.endswith('.yaml')]
 
-    file_name = os.path.basename(args.saved)
-    c = file_name.split('_')[-1].split('.')[0]
-    c = int(c)
-    model = DeepJSCC(c=c, channel_type=args.channel, snr=args.snr)
-    # model.load_state_dict(torch.load(args.saved))
-    model.load_state_dict(torch.load(args.saved,map_location=torch.device('cuda:0')))
-    model.change_channel(args.channel, args.snr)
-
-    psnr_all = 0.0
-
-    for i in range(args.times):
-        demo_image = model(test_image)
-        demo_image = image_normalization('denormalization')(demo_image)
-        gt = image_normalization('denormalization')(test_image)
-        psnr_all += get_psnr(demo_image, gt)
-    demo_image = image_normalization('normalization')(demo_image)
-    demo_image = torch.cat([test_image, demo_image], dim=1)
-    demo_image = transforms.ToPILImage()(demo_image)
-    demo_image.save('./run/{}_{}'.format(args.saved.split('/')[-1], args.test_image.split('/')[-1]))
-    print("psnr on {} is {}".format(args.test_image, psnr_all / args.times))
+    with ProcessPoolExecutor() as executor:
+        executor.map(process_config, config_files, [output_dir] * len(config_files), [dataset_name] * len(config_files), [times] * len(config_files))
 
 
 if __name__ == '__main__':

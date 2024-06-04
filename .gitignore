@@ -1,11 +1,11 @@
-test.py
+test.*
 *.pyc
 *.log
 dataset
-*.ipynb
 *.swp
 .vscode/*
 input.txt
 output.txt
 *.json
 .vscode/*
+*.sh
