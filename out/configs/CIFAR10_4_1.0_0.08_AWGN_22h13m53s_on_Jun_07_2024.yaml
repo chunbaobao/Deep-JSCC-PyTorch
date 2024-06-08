@@ -1,0 +1,46 @@
+dataset_name: cifar10
+inner_channel: 4
+params:
+  ReduceLROnPlateau: false
+  batch_size: 64
+  channel: AWGN
+  dataset: cifar10
+  device: cuda:1
+  disable_tqdm: false
+  epochs: 1000
+  gamma: 0.1
+  if_scheduler: true
+  init_lr: 0.001
+  lr_reduce_factor: 0.5
+  lr_schedule_patience: 15
+  max_time: 12
+  min_lr: 1.0e-05
+  num_workers: 4
+  out_dir: ./out
+  parallel: false
+  ratio: 0.08333333333333333
+  ratio_list:
+  - 0.08333333333333333
+  seed: 42
+  snr: 1.0
+  snr_list:
+  - 1.0
+  step_size: 640
+  weight_decay: 0.0005
+total_parameters: !!python/object/apply:numpy.core.multiarray.scalar
+- !!python/object/apply:numpy.dtype
+  args:
+  - i8
+  - false
+  - true
+  state: !!python/tuple
+  - 3
+  - <
+  - null
+  - null
+  - null
+  - -1
+  - -1
+  - 0
+- !!binary |
+  UTACAAAAAAA=
