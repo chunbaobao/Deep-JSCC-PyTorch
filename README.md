@@ -111,14 +111,21 @@ The `./visualization` directory contains the scripts for visualization of the tr
 
 ## Results
 
-Model results and logs for the **CIFAR-10** dataset, tested under various SNR, ratio, and channel types, are available in the `./out` directory. The models' performance is approximately 5dB worse than reported in the paper, likely due to the implementation reflecting a real communication system. However, the performance trends are consistent with those in the paper.
+
 
  
 <div style="display: flex;">
-  <img src="demo/cifar_0.08.png" alt="Image 1" style="flex: 1; max-width: 48%; height: auto;">
+  <img src="demo/cifar_0.08_AWGN.png" alt="Image 1" style="flex: 1; max-width: 48%; height: auto;">
   <div style="width: 0px;"></div> <!-- 为了让两个图像之间有一点间距 -->
-  <img src="demo/cifar_0.17.png" alt="Image 2" style="flex: 1; max-width: 48%; height: auto;">
+  <img src="demo/cifar_0.17_AWGN.png" alt="Image 2" style="flex: 1; max-width: 48%; height: auto;">
 </div>
+
+<div style="display: flex;">
+  <img src="demo/cifar_0.17_Rayleigh.png" alt="Image 1" style="flex: 1; max-width: 48%; height: auto;">
+  <div style="width: 0px;"></div> <!-- 为了让两个图像之间有一点间距 -->
+  <img src="demo/cifar_0.34_Rayleigh.png" alt="Image 2" style="flex: 1; max-width: 48%; height: auto;">
+</div>
+
 
 
 
