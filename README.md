@@ -6,7 +6,7 @@ This is my first time to use PyTorch and git to reproduce a paper, so there may 
 
 
 ## Update-2024.06.04
-- modify the `train.py` to omit most of the args in command line, you can just us `python train.py --dataset ${dataset_name}` to train the model.
+- modify the `train.py` to omit most of the args in command line, you can just use `python train.py --dataset ${dataset_name}` to train the model.
 - add tensorboard to record the results in exp.
 - add the `visualization/` file to visualize the result.
 - add bash file to run the code in parallel.
@@ -22,7 +22,7 @@ This is my first time to use PyTorch and git to reproduce a paper, so there may 
 ## Demo
 
 
-The model trained on cifar10 which is 32\*32 but test on kodim which is 768\*512 (left); and the model trained on imagenet which is resized to 128\*128 but test on kodim which is 768\*512 (right).
+The model trained on cifar10 which is 32\*32 but test on kodim which is 768\*512 (top); and the model trained on imagenet which is resized to 128\*128 but test on kodim which is 768\*512 (bottom).
 <div style="display: flex;">
   <img src="./demo/cifar10_kodim08.png" alt="Image 1" style="flex: 1; max-width: 48%; height: auto;">
   <div style="width: 5px;"></div> 
